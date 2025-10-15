@@ -250,6 +250,7 @@ TODO 3.3: Fetch User Data from API:
        f) Set loading to false in finally block to stop the spinner.  
           Example: `finally { setLoading(false); }`
 
+          
    Hint: 
    - You can define an async function *inside* useEffect like:
      ```jsx
@@ -288,6 +289,8 @@ TODO 3.5: Open and close the user modal:
        a) Hide the modal by setting setShowModal(false)
        b) Reset the selected user to null using setSelectedUser(null)
 
+       
+
 --------------------------------------------------------------
 TODO 3.6: Handle Loading and Error States:
    Show feedback while fetching or on error.  
@@ -323,17 +326,47 @@ import SearchBar from './components/SearchBar'
 import UserModal from './components/UserModal'
 
 function App() {
-  const [users, setUsers] = useState([])
+//   const [users, setUsers] = useState([])
+   const [users, setUsers] = useState([]);
+   const [filteredUsers, setFilteredUsers] = useState([]);
+   const [loading, setLoading] = useState(true);
+   const [error, setError] = useState(null);
+   const [searchTerm, setSearchTerm] = useState('');
+   const [showModal, setShowModal] = useState(false);
+   const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     {/*API fetch logic*/}
-
+       const fetchUsers = async () => {
+         try {
+         setLoading(true);
+         const response = await fetch('https://jsonplaceholder.typicode.com/users');
+         const data = await response.json();
+         setUsers(data); setFilteredUsers(data);
+         }
+         catch (err) { setError(err.message); }
+          finally { setLoading(false); }
+       };
+       fetchUsers();
   }, [])
 
+  useEffect(() => {
+   
+   const filtered = users.filter(user =>
+            user.name.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+          setFilteredUsers(filtered);
+
+  }, [searchTerm, users])
+
   const handleUserClick = (user) => {
+   setSelectedUser(user)
+   setShowModal(true)
   }
 
   const handleCloseModal = () => {
+   setShowModal(false)
+       setSelectedUser(null)
   }
 
   return (
@@ -348,10 +381,10 @@ function App() {
       <Container className="my-2">
         <SearchBar />
 
-        {/* {loading && <Spinner ... />} */}
-        {/* {error && <Alert ...>{error}</Alert>} */}
-        {/* <UserList users={filteredUsers} onUserClick={handleUserClick} /> */}
-        <UserModal />
+        {loading && <Spinner animation="border"/>}
+        {error && <Alert variant="danger">{error}</Alert>}
+        <UserList users={filteredUsers} onUserClick={handleUserClick} />
+        <UserModal show={showModal} user={selectedUser} onHide={handleCloseModal} />
       </Container>
 
       <footer className="bg-light py-4 mt-5">
