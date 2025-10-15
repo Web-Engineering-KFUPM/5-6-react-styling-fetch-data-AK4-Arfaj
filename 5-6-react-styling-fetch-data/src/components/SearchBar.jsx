@@ -3,7 +3,7 @@ import { Form, InputGroup } from 'react-bootstrap'
 
 function SearchBar({ searchTerm, onSearchChange }) {
   return (
-    <div className="my-4">
+    <div className="mb-4">
       <InputGroup>
         <InputGroup.Text></InputGroup.Text>
         <Form.Control
