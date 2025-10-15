@@ -80,7 +80,7 @@ TODO 1.4: Display User Cards in Grid
     - Use <Alert variant="info"> when no users are found.
     - Make a return statement after the if condition.
     - Make a <Row> tag inside the return statement.
-    - Add  user.map function inside the row tag
+    - Add user.map function inside the row tag
         {users.map(user => (
           ))}
     - Add Col tag inside the user.map function.
@@ -351,7 +351,6 @@ function App() {
         {/* {loading && <Spinner ... />} */}
         {/* {error && <Alert ...>{error}</Alert>} */}
         {/* <UserList users={filteredUsers} onUserClick={handleUserClick} /> */}
-
         <UserModal />
       </Container>
 
